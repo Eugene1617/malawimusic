@@ -71,7 +71,7 @@ async function mainbody() {
       div.className = "song-card";
       div.innerHTML = `
         <img class="artist-img" src="download.png" alt="${artist.artist}" />
-        <audio id="audio-${index}" src="${artist.audio_url}"></audio>
+        <audio id="audio-${index}" src="${artist.url}"></audio>
         <button class="play-btn" onclick="toggleAudio('audio-${index}', this)">
           <i class="fa-solid fa-play"></i>
         </button>
@@ -191,7 +191,7 @@ async function search(query) {
       div.className = "song-card";
       div.innerHTML = `
         <img class="artist-img" src="download.png" alt="${artist.artist}" />
-        <audio id="audio-search-${index}" src="${artist.audio_url}"></audio>
+        <audio id="audio-search-${index}" src="${artist.url}"></audio>
         <button class="play-btn" onclick="toggleAudio('audio-search-${index}', this)">
           <i class="fa-solid fa-play"></i>
         </button>
