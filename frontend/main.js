@@ -185,7 +185,7 @@ async function search(query) {
   showLoader("Searching...");
   try {
     const response = await fetch(
-      `http://127.0.0.1:8000/search?query=${encodeURIComponent(query)}`
+      `https://malawimusic.onrender.com/search?query=${encodeURIComponent(query)}`
     );
     if (!response.ok) throw new Error("Failed to search");
 
@@ -307,7 +307,7 @@ async function mainbody() {
   showLoader('Loading artists...');
 >>>>>>> 459d72a (initial commit:music project setup)
   try {
-    const response = await fetch("http://127.0.0.1:8000/all-entries");
+    const response = await fetch("https://malawimusic.onrender.com/all-entries");
 
     if (!response.ok) throw new Error("Failed to fetch artists");
 
