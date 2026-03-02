@@ -10,135 +10,122 @@ function showLoader(message) {
   loader.setAttribute("aria-hidden", "false");
 }
 
-const customDropdown = document.querySelector(".custom-dropdown");
-const dropdownToggle = document.querySelector(".dropdown-toggle");
-const dropdownLabel = document.querySelector(".dropdown-label");
-const dropdownItems = document.querySelectorAll(".dropdown-item");
-
-dropdownToggle.addEventListener("click", () => {
-  customDropdown.classList.toggle("active");
-});
-
-<<<<<<< HEAD
-=======
-
->>>>>>> 459d72a (initial commit:music project setup)
-document.addEventListener("click", (e) => {
-  if (!customDropdown.contains(e.target)) {
-    customDropdown.classList.remove("active");
-  }
-});
-
-// Handle dropdown item selection
-dropdownItems.forEach((item) => {
-  item.addEventListener("click", () => {
-    const value = item.dataset.value;
-    const label = item.textContent;
-
-    // Update label
-    dropdownLabel.textContent = label;
-
-    // Remove active state from all items
-    dropdownItems.forEach((i) => i.classList.remove("selected"));
-    item.classList.add("selected");
-
-    // Close dropdown
-    customDropdown.classList.remove("active");
-
-    // Trigger search
-    if (value === "all") {
-      mainbody();
-    } else if (value === "hiphop") {
-      search("Hiphop");
-    } else {
-      const genre = value.charAt(0).toUpperCase() + value.slice(1);
-      search(genre);
-    }
-  });
-});
 function hideLoader() {
   const loader = document.getElementById("loader");
   if (!loader) return;
   loader.setAttribute("aria-hidden", "true");
 }
 
+const customDropdown = document.querySelector(".custom-dropdown");
+const dropdownToggle = document.querySelector(".dropdown-toggle");
+const dropdownLabel = document.querySelector(".dropdown-label");
+const dropdownItems = document.querySelectorAll(".dropdown-item");
+
+if (customDropdown && dropdownToggle && dropdownLabel && dropdownItems.length) {
+  dropdownToggle.addEventListener("click", () => {
+    customDropdown.classList.toggle("active");
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!customDropdown.contains(e.target)) {
+      customDropdown.classList.remove("active");
+    }
+  });
+
+  // Handle dropdown item selection
+  dropdownItems.forEach((item) => {
+    item.addEventListener("click", () => {
+      const value = item.dataset.value;
+      const label = item.textContent;
+
+      // Update label
+      dropdownLabel.textContent = label;
+
+      // Remove active state from all items
+      dropdownItems.forEach((i) => i.classList.remove("selected"));
+      item.classList.add("selected");
+
+      // Close dropdown
+      customDropdown.classList.remove("active");
+
+      // Trigger search
+      if (value === "all") {
+        mainbody();
+      } else if (value === "hiphop") {
+        search("Hiphop");
+      } else {
+        const genre = value.charAt(0).toUpperCase() + value.slice(1);
+        search(genre);
+      }
+    });
+  });
+}
+
+function renderArtists(data, audioPrefix) {
+  section.innerHTML = "";
+
+  data.forEach((artist, index) => {
+    const audioId = `${audioPrefix}-${index}`;
+    const progressId = `progress-${audioPrefix}-${index}`;
+
+    const div = document.createElement("div");
+    div.className = "song-card";
+    div.innerHTML = `
+      <img class="artist-img" src="download.png" alt="${artist.artist}" />
+
+      <audio id="${audioId}" src="${artist.audio_url}"></audio>
+
+      <button class="play-btn" onclick="toggleAudio('${audioId}', this)">
+        <i class="fa-solid fa-play"></i>
+      </button>
+
+      <div class="progress">
+        <div class="progress-bar" id="${progressId}" style="width: 0%;"></div>
+      </div>
+
+      <h3>${artist.artist}</h3>
+      <p><strong>Song:</strong> ${artist.song}</p>
+      <p><strong>Genre:</strong> ${artist.genre}</p>
+      <p><strong>Subscribers:</strong> ${artist.subscribers || 0}</p>
+      <hr />
+      <a class="download-btn" href="${artist.audio_url}" download>Download</a>
+    `;
+
+    section.appendChild(div);
+
+    const audio = div.querySelector(`#${audioId}`);
+    const progressBar = div.querySelector(`#${progressId}`);
+
+    audio.addEventListener("timeupdate", () => {
+      if (audio.duration) {
+        const percent = (audio.currentTime / audio.duration) * 100;
+        progressBar.style.width = percent + "%";
+      }
+    });
+
+    audio.addEventListener("ended", () => {
+      resetPlayer(audio, div.querySelector(".play-btn"));
+    });
+  });
+}
+
 async function mainbody() {
-<<<<<<< HEAD
   showLoader("Loading artists...");
-=======
-  showLoader('Loading artists...');
->>>>>>> 459d72a (initial commit:music project setup)
   try {
     const response = await fetch("http://127.0.0.1:8000/all-entries");
 
     if (!response.ok) throw new Error("Failed to fetch artists");
 
     const data = await response.json();
-    section.innerHTML = "";
-
-    data.forEach((artist, index) => {
-      const div = document.createElement("div");
-<<<<<<< HEAD
-      div.className = "song-card";
-      div.innerHTML = `
-        <img class="artist-img" src="download.png" alt="${artist.artist}" />
-
-        <audio id="audio-${index}" src="${artist.url}"></audio>
-=======
-      div.className = "song-card"; 
-      div.innerHTML = `
-        <img class="artist-img" src="download.png" alt="${artist.artist}" />
-
-        <audio id="audio-${index}" src="${artist.audio_url}"></audio>
->>>>>>> 459d72a (initial commit:music project setup)
-
-        <button class="play-btn" onclick="toggleAudio('audio-${index}', this)">
-          <i class="fa-solid fa-play"></i>
-        </button>
-
-        <div class="progress">
-          <div class="progress-bar" id="progress-${index}" style="width: 0%;"></div>
-        </div>
-
-        <h3>${artist.artist}</h3>
-        <p><strong>Song:</strong> ${artist.song}</p>
-        <p><strong>Genre:</strong> ${artist.genre}</p>
-        <p><strong>Subscribers:</strong> ${artist.subscribers || 0}</p>
-        <hr />
-        <a class="download-btn" href="${artist.audio_url}" download>Download</a>
-      `;
-
-      section.appendChild(div);
-
-      // We select the elements specifically for THIS card
-      const audio = div.querySelector(`#audio-${index}`);
-      const progressBar = div.querySelector(`#progress-${index}`);
-
-      // Update progress bar
-      audio.addEventListener("timeupdate", () => {
-        if (audio.duration) {
-          const percent = (audio.currentTime / audio.duration) * 100;
-          progressBar.style.width = percent + "%";
-        }
-      });
-
-      // Reset when song ends
-      audio.addEventListener("ended", () => {
-        resetPlayer(audio, div.querySelector(".play-btn"));
-      });
-    });
+    renderArtists(data, "audio");
   } catch (error) {
     console.error("Connection error:", error);
-<<<<<<< HEAD
-    section.innerHTML =
-      "<p>There was a problem when loading a page.Please try again </p>";
-=======
     section.innerHTML = "<p>Could not load artists. Is the server running?</p>";
->>>>>>> 459d72a (initial commit:music project setup)
   } finally {
     hideLoader();
   }
 }
+
 function toggleAudio(audioId, button) {
   const audio = document.getElementById(audioId);
   const icon = button.querySelector("i");
@@ -162,6 +149,8 @@ function toggleAudio(audioId, button) {
 }
 
 function resetPlayer(audio, button) {
+  if (!audio || !button) return;
+
   const icon = button.querySelector("i");
 
   audio.pause();
@@ -175,6 +164,7 @@ function resetPlayer(audio, button) {
   currentAudio = null;
   currentButton = null;
 }
+
 function toggleTheme() {
   const body = document.body;
   const icon = document.querySelector(".theme-toggle i");
@@ -187,9 +177,9 @@ function toggleTheme() {
   } else {
     icon.classList.remove("fa-sun");
     icon.classList.add("fa-moon");
-<<<<<<< HEAD
   }
 }
+
 function search_() {
   const query = document.getElementById("search_input").value.trim();
   search(query);
@@ -204,75 +194,15 @@ async function search(query) {
       `http://127.0.0.1:8000/search?query=${encodeURIComponent(query)}`,
     );
     if (!response.ok) throw new Error("Failed to search");
-    const data = await response.json();
-    section.innerHTML =
-      "<section class='search-results'><h2>Search Results</h2></section>";
-=======
-  }}
-function search_() {
-    const query = document.getElementById("search_input").value.trim();
-  search(query);
-}
 
-async function search(query){
-  if (!query) return;
-
-  showLoader('Searching...');
-  try {
-    const response = await fetch(`http://127.0.0.1:8000/search?query=${encodeURIComponent(query)}`);
-    if (!response.ok) throw new Error("Failed to search");
     const data = await response.json();
-    section.innerHTML = "<section class='search-results'><h2>Search Results</h2></section>";
->>>>>>> 459d72a (initial commit:music project setup)
+
     if (data.length === 0) {
       section.innerHTML = "<p>No results found.</p>";
       return;
     }
-<<<<<<< HEAD
-    data.forEach((artist, index) => {
-      const div = document.createElement("div");
-      div.className = "song-card";
-      div.innerHTML = `
-      <img class="artist-img" src="download.png" alt="${artist.artist}" />
 
-      <audio id="audio-search-${index}" src="${artist.url}"></audio>  
-=======
-  data.forEach((artist,index)=>{
-    const div=document.createElement("div");
-    div.className="song-card";
-    div.innerHTML=`
-      <img class="artist-img" src="download.png" alt="${artist.artist}" />
-
-      <audio id="audio-search-${index}" src="${artist.audio_url}"></audio>  
->>>>>>> 459d72a (initial commit:music project setup)
-      <button class="play-btn" onclick="toggleAudio('audio-search-${index}', this)">
-        <i class="fa-solid fa-play"></i>
-      </button>
-
-      <div class="progress">
-        <div class="progress-bar" id="progress-search-${index}" style="width: 0%;"></div>
-      </div> 
-      <h3>${artist.artist}</h3>
-      <p><strong>Song:</strong> ${artist.song}</p>
-      <p><strong>Genre:</strong> ${artist.genre}</p>
-      <p><strong>Subscribers:</strong> ${artist.subscribers || 0}</p>
-      <hr />
-      <a class="download-btn" href="${artist.audio_url}" download>Download</a>
-    `;
-<<<<<<< HEAD
-      section.appendChild(div);
-      const audio = div.querySelector(`#audio-search-${index}`);
-      const progressBar = div.querySelector(`#progress-search-${index}`);
-      audio.addEventListener("timeupdate", () => {
-        if (audio.duration) {
-          const percent = (audio.currentTime / audio.duration) * 100;
-          progressBar.style.width = percent + "%";
-        }
-      });
-      audio.addEventListener("ended", () => {
-        resetPlayer(audio, div.querySelector(".play-btn"));
-      });
-    });
+    renderArtists(data, "audio-search");
   } catch (error) {
     console.error("Search error:", error);
     section.innerHTML = "<p>Search failed. Please try again.</p>";
@@ -280,43 +210,5 @@ async function search(query){
     hideLoader();
   }
 }
-function submit() {
-  const name = document.querySelector("#name").value.toUpperCase();
-  const password = document.querySelector("#password").value;
-  if (name || password) {
-    if (name === "ADMIN" || password === "Malawi@vibes") {
-      admin();
-    } else {
-      alert("wrong details");
-    }
-  } else {
-    return 0;
-  }
-}
-function admin() {
-  section.innerHTML = "";
-  section.innerHTML = "<section id='main_body'><main id='login' > <h1> choose operation</h1><div> <button class='but'>delete form the website</button> <button class='but'>update details</button> <button class='but'>upload new music</button> </div></main></section>";
-}
-=======
-    section.appendChild(div);
-    const audio=div.querySelector(`#audio-search-${index}`);
-    const progressBar=div.querySelector(`#progress-search-${index}`);
-    audio.addEventListener("timeupdate",()=>{
-      if(audio.duration){
-        const percent=(audio.currentTime/audio.duration)*100;
-        progressBar.style.width=percent+"%";
-      }
-    });
-    audio.addEventListener("ended",()=>{
-      resetPlayer(audio,div.querySelector(".play-btn"));
-    }); 
-  });
-}catch(error){
-  console.error("Search error:",error);
-  section.innerHTML="<p>Search failed. Please try again.</p>";
-}finally{
-  hideLoader();
-}}
 
->>>>>>> 459d72a (initial commit:music project setup)
 mainbody();
