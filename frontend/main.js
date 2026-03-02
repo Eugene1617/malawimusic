@@ -120,7 +120,7 @@ async function mainbody() {
     renderArtists(data, "audio");
   } catch (error) {
     console.error("Connection error:", error);
-    section.innerHTML = "<p>Could not load artists. Is the server running?</p>";
+    section.innerHTML = "<p>Could not load artists. reload page?</p>";
   } finally {
     hideLoader();
   }
@@ -191,7 +191,7 @@ async function search(query) {
   showLoader("Searching...");
   try {
     const response = await fetch(
-      `http://127.0.0.1:8000/search?query=${encodeURIComponent(query)}`,
+      `https://malawimusic.onrender.com/search?query=${encodeURIComponent(query)}`,
     );
     if (!response.ok) throw new Error("Failed to search");
 
