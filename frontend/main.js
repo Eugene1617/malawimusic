@@ -73,7 +73,7 @@ function renderArtists(data, audioPrefix) {
     div.innerHTML = `
       <img class="artist-img" src="download.png" alt="${artist.artist}" />
 
-      <audio id="${audioId}" src="${artist.audio_url}"></audio>
+      <audio id="${audioId}" src="${artist.url}"></audio>
 
       <button class="play-btn" onclick="toggleAudio('${audioId}', this)">
         <i class="fa-solid fa-play"></i>
