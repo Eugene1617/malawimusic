@@ -112,7 +112,7 @@ function renderArtists(data, audioPrefix) {
 async function mainbody() {
   showLoader("Loading artists...");
   try {
-    const response = await fetch("http://127.0.0.1:8000/all-entries");
+    const response = await fetch("https://dashboard.render.com/web/srv-d6heged6ubrc73bq5vug/all-entries");
 
     if (!response.ok) throw new Error("Failed to fetch artists");
 
