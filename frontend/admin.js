@@ -40,7 +40,7 @@ async function delete_music() {
 
   try {
     const params = new URLSearchParams({ artist, title });
-    const response = await fetch(`http://127.0.0.1:8000/delete-song?${params}`, {
+    const response = await fetch(`https://malawimusic.onrender.com/delete-song?${params}`, {
       method: "DELETE"
     });
 
@@ -75,7 +75,7 @@ async function upload_music() {
   formData.append("song_file", file);
 
   try {
-    const response = await fetch("http://127.0.0.1:8000/upload", {
+    const response = await fetch("https://malawimusic.onrender.com/upload", {
       method: "POST",
       body: formData
     });
@@ -94,7 +94,7 @@ async function upload_music() {
 async function view_all_music() {
   section.innerHTML = "";
   try {
-    const response = await fetch("http://127.0.0.1:8000/all-entries");
+    const response = await fetch("https://malawimusic.onrender.com/all-entries");
     const data = await response.json();
     if (response.ok) {
       if (data.length === 0) {
